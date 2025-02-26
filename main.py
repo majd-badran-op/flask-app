@@ -1,12 +1,11 @@
 from flask import Flask, request, jsonify, abort
-from flask.views import MethodView
 
 app = Flask(__name__)
 students = []
 id = 1
 
 
-class StudentView(MethodView):
+class StudentView:
     @app.route('/students/create_student', methods=['POST'])
     def create_student():
         global id
