@@ -70,4 +70,3 @@ class StudentView:
 
 if __name__ == '__main__':
     app.run(debug=True)
-# curl -X POST http://127.0.0.1:5000/students/create_student -H "Content-Type: application/json" -d '{"name": "John Doe", "age": 20, "grade": "A"}'
