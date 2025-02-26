@@ -8,13 +8,10 @@ class students_controller:
     @staticmethod
     def add_student(data: dict):
         global id
-        entity = student()
-        entity.id = id
-        entity.name = data["name"]
-        entity.age = data["age"]
-        entity.grade = data["grade"]
-        repo = student_repo(entity)
+        entity = student(id, data["name"], data["age"], data["grade"],)
+        repo = student_repo()
         result = repo.insert(entity)
+        id += id
         return result
 
     @staticmethod

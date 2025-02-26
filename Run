@@ -1,1 +1,16 @@
-curl -X POST http://127.0.0.1:5000/students/create_student -H "Content-Type: application/json" -d '{"name": "John Doe", "age": 20, "grade": "A"}'
+curl -X POST http://127.0.0.1:5000/students/create_student \
+     -H "Content-Type: application/json" \
+     -d '{"name": "John Doe", "age": "20", "grade": "A"}'
+
+curl -X GET http://127.0.0.1:5000/students \
+     -H "Content-Type: application/json"
+
+curl -X GET http://127.0.0.1:5000/students/1 \
+     -H "Content-Type: application/json"
+
+curl -X PUT http://127.0.0.1:5000/students/update_student/1 \
+     -H "Content-Type: application/json" \
+     -d '{"name": "John Doe", "age": "21", "grade": "A+"}'
+
+curl -X DELETE http://127.0.0.1:5000/students/delete_student/1 \
+     -H "Content-Type: application/json"

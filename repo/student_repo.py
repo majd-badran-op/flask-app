@@ -1,4 +1,4 @@
-from base_repo import BaseRepo
+from repo.base_repo import BaseRepo
 from entities.student_entity import student
 
 

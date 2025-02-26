@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 class StudentView:
     @app.route('/students/create_student', methods=['POST'])
+    @staticmethod
     def insert_student():
         data = request.get_json()
         result = students_controller.add_student(data)
@@ -15,29 +16,33 @@ class StudentView:
             abort(400, description='Required key missing')
 
     @app.route('/students', methods=['GET'])
+    @staticmethod
     def get_students():
         result = students_controller.get_all()
         return jsonify(result=result)
 
     @app.route('/students/<int:id>', methods=['GET'])
-    def get_student(self, id):
+    @staticmethod
+    def get_student(id):
         result = students_controller.get_by_id(id)
         if result is None:
-            abort(404, description='student not found')
+            abort(404, description='Student not found')
         return jsonify(result=result)
 
     @app.route('/students/update_student/<int:id>', methods=['PUT'])
-    def update_student(self, id):
+    @staticmethod
+    def update_student(id):
         data = request.get_json()
         result = students_controller.update(id, data)
-        if result:
-            abort(404, description='student not found')
+        if not result:
+            abort(404, description='Student not found')
 
     @app.route('/students/delete_student/<int:id>', methods=['DELETE'])
-    def delete_student(self, id):
+    @staticmethod
+    def delete_student(id):
         result = students_controller.delete(id)
-        if result:
-            abort(404, description='student not found')
+        if not result:
+            abort(404, description='Student not found')
 
 
 if __name__ == '__main__':

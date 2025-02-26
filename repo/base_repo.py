@@ -9,18 +9,17 @@ class BaseRepo(Generic[E]):
     def __init__(self, entity: Type[E]) -> None:
         self.entity = entity
 
-    def insert(self, entity: E):
+    def insert(self, entity: Type[E]):
         global id
         students.append(entity)
-        id += 1
         return entity
 
     @staticmethod
-    def get_all(self) -> list[E]:
+    def get_all() -> list[E]:
         return students
 
     @staticmethod
-    def get(self, id: int) -> Type[E]:
+    def get(id: int) -> Type[E]:
         stu = None
         for s in students:
             if s['id'] == id:
@@ -32,20 +31,20 @@ class BaseRepo(Generic[E]):
             return stu
 
     @staticmethod
-    def update(self, entity: Type[E], id: int) -> bool:
+    def update(entity: Type[E], id: int) -> bool:
         status = False
         for s in students:
-            if s['id'] == id:
+            if s == id:
                 status = True
                 s = entity
                 break
         return status
 
     @staticmethod
-    def delete(self, id: int) -> bool:
+    def delete(id) -> bool:
         status = False
         for s in students:
-            if s['id'] == id:
+            if s.id == id:
                 status = True
                 students.pop(s['id'])
                 break
