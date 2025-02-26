@@ -16,7 +16,8 @@ class BaseRepo(Generic[E]):
 
     @staticmethod
     def get_all() -> list[E]:
-        return students
+        result: list[E] = students
+        return result
 
     @staticmethod
     def get(id: int) -> Type[E]:
@@ -33,8 +34,9 @@ class BaseRepo(Generic[E]):
     @staticmethod
     def update(entity: Type[E], id: int) -> bool:
         status = False
+        s: Type[E]
         for s in students:
-            if s == id:
+            if s.id == id:
                 status = True
                 s = entity
                 break
@@ -44,7 +46,8 @@ class BaseRepo(Generic[E]):
     def delete(id) -> bool:
         status = False
         for s in students:
-            if s.id == id:
+            s: Type[E]
+            if s == id:
                 status = True
                 students.pop(s['id'])
                 break
