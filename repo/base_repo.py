@@ -27,7 +27,7 @@ class BaseRepo(Generic[E]):
 
     @classmethod
     def update(cls, entity: E, id: int) -> bool:
-        for i, s in enumerate(cls.students):
+        for i, s in cls.students:
             if s.id == id:
                 cls.students[i] = entity
                 return True
@@ -35,7 +35,7 @@ class BaseRepo(Generic[E]):
 
     @classmethod
     def delete(cls, id: int) -> bool:
-        for i, s in enumerate(cls.students):
+        for i, s in cls.students:
             if s.id == id:
                 cls.students.pop(i)
                 return True
