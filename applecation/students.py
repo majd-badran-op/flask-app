@@ -8,7 +8,7 @@ class students_controller:
     @staticmethod
     def add_student(data: dict):
         global id
-        entity = student(id, data["name"], data["age"], data["grade"],)
+        entity = student(id, data['name'], data['age'], data['grade'],)
         repo = student_repo()
         result = repo.insert(entity)
         id += 1
@@ -27,12 +27,8 @@ class students_controller:
 
     @staticmethod
     def update(id, data: dict):
-        entity = student()
-        entity.id = data["id"]
-        entity.name = data["name"]
-        entity.age = data["age"]
-        entity.grade = data["grade"]
-        result = student_repo.update(id, entity)
+        entity = student(data['id'], data['name'], data['age'], data['grade'])
+        result = student_repo.update(entity, data['id'])
         if result:
             return None
 

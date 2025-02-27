@@ -1,52 +1,42 @@
 from typing import Generic, TypeVar, Type
 from entities.baseclass import BaseEntity
-
 E = TypeVar('E', bound='BaseEntity')
-students = [E]
 
 
 class BaseRepo(Generic[E]):
+    students: list[E] = []
+
     def __init__(self, entity: Type[E]) -> None:
         self.entity = entity
 
-    def insert(self, entity: Type[E]):
-        global id
-        students.append(entity)
+    @classmethod
+    def insert(cls, entity: E):
+        cls.students.append(entity)
         return entity
 
-    @staticmethod
-    def get_all() -> list[E]:
-        result: list[E] = students
-        return result
+    @classmethod
+    def get_all(cls) -> list[E]:
+        return cls.students
 
-    @staticmethod
-    def get(id: int) -> Type[E]:
-        stu = None
-        for s in students:
+    @classmethod
+    def get(cls, id: int) -> E | None:
+        for s in cls.students:
             if s.id == id:
-                stu = s
-                break
-        if stu is None:
-            return None
-        else:
-            return stu
+                return s
+        return None
 
-    @staticmethod
-    def update(entity: Type[E], id: int) -> bool:
-        status = False
-        for s in students:
+    @classmethod
+    def update(cls, entity: E, id: int) -> bool:
+        for i, s in enumerate(cls.students):
             if s.id == id:
-                status = True
-                s = entity
-                break
-        return status
+                cls.students[i] = entity
+                return True
+        return False
 
-    @staticmethod
-    def delete(id) -> bool:
-        status = False
-        for s in students:
-            if s == id:
-                status = True
-                students.pop(s['id'])
-                break
-        return status
+    @classmethod
+    def delete(cls, id: int) -> bool:
+        for i, s in enumerate(cls.students):
+            if s.id == id:
+                cls.students.pop(i)
+                return True
+        return False

@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify, abort
+from flask import Flask, abort, jsonify, request
 from flask.views import MethodView
+
 from applecation.students import students_controller
 
 app = Flask(__name__)
