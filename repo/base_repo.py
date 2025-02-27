@@ -11,32 +11,32 @@ class BaseRepo(Generic[E]):
 
     @classmethod
     def insert(cls, entity: E):
-        cls.students.append(entity)
+        BaseRepo.students.append(entity)
         return entity
 
     @classmethod
     def get_all(cls) -> list[E]:
-        return cls.students
+        return BaseRepo.students
 
     @classmethod
     def get(cls, id: int) -> E | None:
-        for s in cls.students:
+        for s in BaseRepo.students:
             if s.id == id:
                 return s
         return None
 
     @classmethod
     def update(cls, entity: E, id: int) -> bool:
-        for i, s in cls.students:
+        for i, s in BaseRepo.students:
             if s.id == id:
-                cls.students[i] = entity
+                BaseRepo.students[i] = entity
                 return True
         return False
 
     @classmethod
     def delete(cls, id: int) -> bool:
-        for i, s in cls.students:
+        for i, s in BaseRepo.students:
             if s.id == id:
-                cls.students.pop(i)
+                BaseRepo.students.pop(i)
                 return True
         return False
