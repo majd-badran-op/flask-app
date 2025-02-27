@@ -1,40 +1,36 @@
+from typing import Any, Dict
 from entities.student_entity import student
 from repo.student_repo import student_repo
-
-id = 1
 
 
 class students_controller:
     repo = student_repo()
+    id = 1
 
     @staticmethod
-    def add_student(data: dict):
-        global id
-        entity = student(id,
-                         data['name'], data['age'], data['grade'])
-        result = students_controller.repo.insert(entity)
-        id += 1
-        return result
+    def add_student(data: Dict[str, Any]) -> student:
+        entity = student(
+            students_controller.id, data['name'], data['age'], data['grade']
+        )
+        students_controller.id += 1
+        return students_controller.repo.insert(entity)
 
-    @staticmethod
-    def get_all():
-        return students_controller.repo.get_all()
+    @classmethod
+    def get_all(cls) -> list[Dict[str, Any]]:
+        return [vars(s) for s in cls.repo.get_all()]
 
-    @staticmethod
-    def get_by_id(id):
-        result = students_controller.repo.get(id)
-        if result is None:
-            return None
-        return students_controller.repo.get(id)
+    @classmethod
+    def get_by_id(cls, id: int) -> Dict[str, Any] | None:
+        student_entity = cls.repo.get(id)
+        if student_entity:
+            return vars(student_entity)
+        return None
 
-    @staticmethod
-    def update(id, data: dict):
+    @classmethod
+    def update(cls, id: int, data: Dict[str, Any]) -> bool:
         entity = student(data['id'], data['name'], data['age'], data['grade'])
-        result = students_controller.repo.update(entity, data['id'])
-        if result:
-            return None
+        return cls.repo.update(entity, id)
 
-    @staticmethod
-    def delete(id):
-        result = students_controller.repo.delete(id)
-        return result
+    @classmethod
+    def delete(cls, id: int) -> bool:
+        return cls.repo.delete(id)

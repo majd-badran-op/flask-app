@@ -3,5 +3,5 @@ from entities.student_entity import student
 
 
 class student_repo(BaseRepo[student]):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(student)
