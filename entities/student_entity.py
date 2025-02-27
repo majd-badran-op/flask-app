@@ -11,3 +11,6 @@ class student(BaseEntity):
         self.name = name
         self.age = age
         self.grade = grade
+
+    def get_id(self):
+        return self.id

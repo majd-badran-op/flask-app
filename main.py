@@ -9,7 +9,7 @@ class StudentView(MethodView):
     def get(self, id=None):
         if id is None:
             result = students_controller.get_all()
-            return jsonify(result=result)
+            return jsonify(result)
         result = students_controller.get_by_id(id)
         if result is None:
             abort(404, description='Student not found')
@@ -19,7 +19,7 @@ class StudentView(MethodView):
         data = request.get_json()
         result = students_controller.add_student(data)
         if result:
-            return jsonify(result=vars(result)), 201
+            return jsonify(result=vars(result))
         abort(400, description='required key missing')
 
     def put(self, id):

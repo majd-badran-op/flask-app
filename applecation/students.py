@@ -11,7 +11,7 @@ class students_controller:
         entity = student(id, data["name"], data["age"], data["grade"],)
         repo = student_repo()
         result = repo.insert(entity)
-        id += id
+        id += 1
         return result
 
     @staticmethod
@@ -39,6 +39,4 @@ class students_controller:
     @staticmethod
     def delete(id):
         result = student_repo.delete(id)
-        if result is None:
-            return None
         return result
