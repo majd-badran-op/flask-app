@@ -1,6 +1,8 @@
-from flask import Flask, abort, jsonify, request
 from typing import Any, Optional
+
+from flask import Flask, abort, jsonify, request
 from flask.views import MethodView
+
 from applecation.students import students_controller
 
 app = Flask(__name__)
@@ -27,13 +29,13 @@ class StudentView(MethodView):
     def put(self, id: int) -> Any:
         data = request.get_json()
         result = students_controller.update(id, data)
-        if result:
+        if result is False:
             abort(404, description='Student not found')
         return jsonify(message='Student updated successfully')
 
     def delete(self, id: int) -> Any:
         result = students_controller.delete(id)
-        if result:
+        if result is False:
             abort(404, description='student not found')
         return jsonify(message='Student deleted successfully')
 

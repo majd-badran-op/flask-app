@@ -28,7 +28,7 @@ class students_controller:
 
     @classmethod
     def update(cls, id: int, data: Dict[str, Any]) -> bool:
-        entity = student(data['id'], data['name'], data['age'], data['grade'])
+        entity = student(id, data['name'], data['age'], data['grade'])
         return cls.repo.update(entity, id)
 
     @classmethod
