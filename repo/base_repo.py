@@ -13,6 +13,9 @@ class BaseRepo(Generic[E]):
     @classmethod
     def insert(cls, entity: E) -> E:
         id_str = str(entity.id)
+        for student in cls.students.values():
+            if student.name == entity.name and student.age == entity.age:
+                raise ValueError('Student with the same name and age already exists')
         cls.students[id_str] = entity
         return entity
 
@@ -22,7 +25,9 @@ class BaseRepo(Generic[E]):
 
     @classmethod
     def get(cls, id: int) -> E | None:
-        return cls.students.get(str(id))
+        if str(id) in cls.students:
+            return cls.students.get(str(id))
+        return None
 
     @classmethod
     def update(cls, entity: E, id: int) -> bool:
