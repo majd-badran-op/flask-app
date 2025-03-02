@@ -1,5 +1,5 @@
-from repo.base_repo import BaseRepo
-from entities.student_entity import Student
+from infrastructure.base_repo import BaseRepo
+from domain.student_entity import Student
 
 
 class StudentRepo(BaseRepo[Student]):

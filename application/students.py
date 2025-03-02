@@ -1,6 +1,6 @@
 from typing import Any, Dict
-from entities.student_entity import Student
-from repo.student_repo import StudentRepo
+from domain.student_entity import Student
+from infrastructure.student_repo import StudentRepo
 
 
 class StudentServices:
@@ -28,8 +28,16 @@ class StudentServices:
 
     @classmethod
     def update(cls, id: int, data: Dict[str, Any]) -> bool:
-        entity = Student(id, data['name'], data['age'], data['grade'])
-        return cls.repo.update(entity, id)
+        student = cls.repo.get(id)
+        if student is None:
+            return False
+        if 'name' in data and data['name'] != student.name:
+            student.name = data['name']
+        if 'age' in data and data['age'] != student.age:
+            student.age = data['age']
+        if 'grade' in data and data['grade'] != student.grade:
+            student.grade = data["grade"]
+        return cls.repo.update(student, id)
 
     @classmethod
     def delete(cls, id: int) -> bool:

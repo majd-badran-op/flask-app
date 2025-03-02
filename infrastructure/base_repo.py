@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar, Type
-from entities.baseclass import BaseEntity
+from domain.baseclass import BaseEntity
 
 E = TypeVar('E', bound=BaseEntity)
 

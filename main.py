@@ -1,15 +1,13 @@
 from typing import Any, Optional
-
-from flask import Flask, abort, jsonify, request
+from flask import Flask, abort, jsonify, request, Response
 from flask.views import MethodView
-
-from applecation.students import StudentServices
+from application.students import StudentServices
 
 app = Flask(__name__)
 
 
 class StudentView(MethodView):
-    def get(self, id: Optional[int] = None) -> Any:
+    def get(self, id: Optional[int] = None) -> Response:
         if id is None:
             result: list[dict[str, Any]] | dict[str, Any] | None = StudentServices.get_all()
             return jsonify(result)
@@ -19,21 +17,21 @@ class StudentView(MethodView):
                 abort(404, description='Student not found')
             return jsonify(result=result)
 
-    def post(self) -> Any:
+    def post(self) -> Response:
         data = request.get_json()
         result = StudentServices.add_student(data)
         if result:
             return jsonify(result=vars(result))
         abort(400, description='required key missing')
 
-    def put(self, id: int) -> Any:
-        data = request.get_json()
+    def put(self, id: int) -> Response:
+        data: dict[str, Any] = request.get_json()
         result = StudentServices.update(id, data)
         if result is False:
             abort(404, description='Student not found')
         return jsonify(message='Student updated successfully')
 
-    def delete(self, id: int) -> Any:
+    def delete(self, id: int) -> Response:
         result = StudentServices.delete(id)
         if result is False:
             abort(404, description='student not found')
