@@ -1,7 +1,7 @@
 from repo.base_repo import BaseRepo
-from entities.student_entity import student
+from entities.student_entity import Student
 
 
-class student_repo(BaseRepo[student]):
+class StudentRepo(BaseRepo[Student]):
     def __init__(self) -> None:
-        super().__init__(student)
+        super().__init__(Student)

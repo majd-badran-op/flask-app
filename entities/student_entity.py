@@ -1,7 +1,7 @@
 from entities.baseclass import BaseEntity
 
 
-class student(BaseEntity):
+class Student(BaseEntity):
     def __init__(self, id: int, name: str, age: int, grade: str):
         super().__init__(id)
         self.name = name

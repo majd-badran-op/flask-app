@@ -1,19 +1,19 @@
 from typing import Any, Dict
-from entities.student_entity import student
-from repo.student_repo import student_repo
+from entities.student_entity import Student
+from repo.student_repo import StudentRepo
 
 
-class students_controller:
-    repo = student_repo()
+class StudentServices:
+    repo = StudentRepo()
     id = 1
 
     @staticmethod
-    def add_student(data: Dict[str, Any]) -> student:
-        entity = student(
-            students_controller.id, data['name'], data['age'], data['grade']
+    def add_student(data: Dict[str, Any]) -> Student:
+        entity = Student(
+            StudentServices.id, data['name'], data['age'], data['grade']
         )
-        students_controller.id += 1
-        return students_controller.repo.insert(entity)
+        StudentServices.id += 1
+        return StudentServices.repo.insert(entity)
 
     @classmethod
     def get_all(cls) -> list[Dict[str, Any]]:
@@ -28,7 +28,7 @@ class students_controller:
 
     @classmethod
     def update(cls, id: int, data: Dict[str, Any]) -> bool:
-        entity = student(id, data['name'], data['age'], data['grade'])
+        entity = Student(id, data['name'], data['age'], data['grade'])
         return cls.repo.update(entity, id)
 
     @classmethod
