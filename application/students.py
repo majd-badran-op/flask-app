@@ -7,7 +7,7 @@ class StudentServices:
     repo = StudentRepo()
 
     @staticmethod
-    def add_student(data: Dict[str, Any]) -> Student:
+    def add_student(data: Dict[str, Any]) -> Student | None:
         entity = Student(
             id=None,
             name=data['name'],
