@@ -1,42 +1,54 @@
 from typing import Generic, TypeVar, Type
 from domain.baseclass import BaseEntity
+from database.con import get_connection
+from sqlalchemy import Table, insert, select, update, delete
 
-E = TypeVar('E', bound=BaseEntity)
+E = TypeVar("E", bound=BaseEntity)
 
 
 class BaseRepo(Generic[E]):
-    students: dict[str, E] = {}
-
-    def __init__(self, entity: Type[E]) -> None:
+    def __init__(self, entity: Type[E], table: Table) -> None:
         self.entity = entity
+        self.table = table
 
-    @classmethod
-    def insert(cls, entity: E) -> E:
-        id_str = str(entity.id)
-        for student in cls.students.values():
-            if student.name == entity.name and student.age == entity.age:
-                raise ValueError('Student with the same name and age already exists')
-        cls.students[id_str] = entity
+    def insert(self, entity: E) -> E:
+        with get_connection() as session:
+            stmt = insert(self.table).values(
+                id=entity.id,
+                name=entity.name,
+                age=entity.age,
+                grade=getattr(entity, "grade", None)
+            )
+            session.execute(stmt)
+            session.commit()
         return entity
 
-    @classmethod
-    def get_all(cls) -> list[E]:
-        return list(cls.students.values())
+    def get_all(self) -> list[E]:
+        with get_connection() as session:
+            stmt = select(self.table)
+            result = session.execute(stmt)
+            return [self.entity(**row._mapping) for row in result.fetchall()]
 
-    @classmethod
-    def get(cls, id: int) -> E | None:
-        if str(id) in cls.students:
-            return cls.students.get(str(id))
-        return None
+    def get(self, id: int) -> E | None:
+        with get_connection() as session:
+            stmt = select(self.table).where(self.table.c.id == id)
+            result = session.execute(stmt).fetchone()
+            return self.entity(**result._mapping) if result else None
 
-    @classmethod
-    def update(cls, entity: E, id: int) -> bool:
-        id_str = str(id)
-        if id_str in cls.students:
-            cls.students[id_str] = entity
-            return True
-        return False
+    def update(self, entity: E, id: int) -> bool:
+        with get_connection() as session:
+            stmt = (
+                update(self.table)
+                .where(self.table.c.id == id)
+                .values(name=entity.name, age=entity.age, grade=getattr(entity, "grade", None))
+            )
+            result = session.execute(stmt)
+            session.commit()
+            return result.rowcount > 0
 
-    @classmethod
-    def delete(cls, id: int) -> bool:
-        return cls.students.pop(str(id), None) is not None
+    def delete(self, id: int) -> bool:
+        with get_connection() as session:
+            stmt = delete(self.table).where(self.table.c.id == id)
+            result = session.execute(stmt)
+            session.commit()
+            return result.rowcount > 0
