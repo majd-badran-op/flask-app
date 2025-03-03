@@ -5,14 +5,15 @@ from infrastructure.student_repo import StudentRepo
 
 class StudentServices:
     repo = StudentRepo()
-    id = 1
 
     @staticmethod
     def add_student(data: Dict[str, Any]) -> Student:
         entity = Student(
-            StudentServices.id, data['name'], data['age'], data['grade']
+            id=None,
+            name=data['name'],
+            age=data['age'],
+            grade=data['grade']
         )
-        StudentServices.id += 1
         return StudentServices.repo.insert(entity)
 
     @classmethod
