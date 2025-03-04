@@ -1,4 +1,4 @@
-from infrastructure.base_repo import BaseRepo
+from infrastructure.repository.base_repo import BaseRepo
 from domain.student_entity import Student
 from infrastructure.database.schema import students
 

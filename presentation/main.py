@@ -1,7 +1,7 @@
 from typing import Any, Optional
 from flask import Flask, abort, jsonify, request, Response
 from flask.views import MethodView
-from application.students import StudentServices
+from application.services.students import StudentServices
 
 app = Flask(__name__)
 

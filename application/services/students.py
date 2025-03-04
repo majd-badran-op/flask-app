@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from domain.student_entity import Student
-from infrastructure.student_repo import StudentRepo
+from infrastructure.repository.student_repo import StudentRepo
 
 
 class StudentServices:
