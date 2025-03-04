@@ -1,6 +1,6 @@
 from infrastructure.base_repo import BaseRepo
 from domain.student_entity import Student
-from database.schema import students
+from infrastructure.database.schema import students
 
 
 class StudentRepo(BaseRepo[Student]):

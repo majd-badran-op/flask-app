@@ -1,7 +1,7 @@
 # Create a new student
 curl -X POST http://127.0.0.1:5000/students \
      -H "Content-Type: application/json" \
-     -d '{"name": "John Doe", "age": 20, "grade": "A"}'
+     -d '{"name": "John Doe", "age": 20, "grade": 50}'
 
 # Get all students
 curl -X GET http://127.0.0.1:5000/students \
@@ -14,8 +14,8 @@ curl -X GET http://127.0.0.1:5000/students/4 \
 # Update a student by ID
 curl -X PUT http://127.0.0.1:5000/students/4 \
      -H "Content-Type: application/json" \
-     -d '{"name": "John Doe", "age": 21, "grade": "A+"}'
+     -d '{"name": "John Doe", "age": 21, "grade": 80}'
 
 # Delete a student by ID
-curl -X DELETE http://127.0.0.1:5000/students/1 \
+curl -X DELETE http://127.0.0.1:5000/students/10 \
      -H "Content-Type: application/json"
