@@ -1,5 +1,5 @@
 from flask import Flask
-from .endpoints.student_view import register_routes
+from .endpoints.routes import register_routes
 
 app = Flask(__name__)
 

@@ -1,14 +1,14 @@
 from typing import Any, Dict
-from infrastructure.repository.student_repo import StudentRepo
+from infrastructure.repository.teacher_repo import TeacherRepo
 from infrastructure.repository.unit_of_work import UnitOfWork
-from domain.entities.student_entity import Student
+from domain.entities.teacher_entity import Teacher
 
 
-class StudentServices:
-    def __init__(self, repo: StudentRepo) -> None:
+class TeacherServices:
+    def __init__(self, repo: TeacherRepo) -> None:
         self.repo = repo
 
-    def add_student(self, entity: Student) -> Student | None:
+    def add_student(self, entity: Teacher) -> Teacher | None:
         with UnitOfWork(self.repo) as uow:
             assert uow.repo is not None
             result = uow.repo.insert(entity, uow.session)
@@ -35,7 +35,7 @@ class StudentServices:
                 return False
             student.name = data.get('name', student.name)
             student.age = data.get('age', student.age)
-            student.grade = data.get('grade', student.grade)
+            student.subject = data.get('subject', student.grade)
 
             uow.repo.update(student, id, uow.session)
             uow.commit()

@@ -1,5 +1,5 @@
 from .base_repo import BaseRepo
-from domain.student_entity import Student
+from domain.entities.student_entity import Student
 from infrastructure.database.schema import students
 
 

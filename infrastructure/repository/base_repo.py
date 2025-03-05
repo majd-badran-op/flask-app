@@ -1,5 +1,5 @@
 from typing import Generic, TypeVar, Type, List, Any
-from domain.base_class import BaseEntity
+from domain.entities.base_class import BaseEntity
 from sqlalchemy import Table, insert, select, update, delete
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Result

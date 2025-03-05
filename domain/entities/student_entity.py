@@ -1,4 +1,4 @@
-from domain.base_class import BaseEntity
+from .base_class import BaseEntity
 from dataclasses import dataclass
 
 

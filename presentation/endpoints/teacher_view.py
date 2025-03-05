@@ -1,47 +1,47 @@
 from typing import Optional
 from flask import abort, jsonify, request, Response
 from flask.views import MethodView
-from application.services.students import StudentServices
-from domain.entities.student_entity import Student
-from infrastructure.repository.student_repo import StudentRepo
+from application.services.teachers import TeacherServices
+from domain.entities.teacher_entity import Teacher
+from infrastructure.repository.teacher_repo import TeacherRepo
 from typing import Dict, Any
 
 
-class StudentView(MethodView):
+class TeacherView(MethodView):
     def __init__(self) -> None:
-        student_repo = StudentRepo()
-        self.service = StudentServices(student_repo)
+        teacher_repo = TeacherRepo()
+        self.service = TeacherServices(teacher_repo)
 
-    def get(self, id: Optional[int] = None) -> Response | None:
+    def get(self, id: Optional[int] = None) -> Response:
         if id is None:
-            all_students: list[Dict[str, Any]] = self.service.get_all()
-            return jsonify(all_students)
+            all_teacher: list[Dict[str, Any]] = self.service.get_all()
+            return jsonify(all_teacher)
         else:
-            student: Dict[str, Any] | None = self.service.get_by_id(int(id))
-            if student is None:
+            teacher: Dict[str, Any] | None = self.service.get_by_id(int(id))
+            if teacher is None:
                 abort(404, description='Student not found')
                 return None
-            return jsonify(student)
+            return jsonify(teacher)
 
     def post(self) -> Response | None:
         data = request.get_json()
         if not data:
             abort(400, description="Invalid data")
 
-        entity = Student(
+        entity = Teacher(
             id=None,
             name=data.get('name'),
             age=data.get('age'),
-            grade=data.get('grade'),
+            subject=data.get('subject')
         )
-        if not all([entity.name, entity.age, entity.grade]):
+        if not all([entity.name, entity.age, entity.subject]):
             abort(400, description='Required fields missing')
             return None
 
         result = self.service.add_student(entity)
         if result:
             return jsonify(vars(result))
-        abort(500, description='Error adding student')
+        abort(500, description='Error adding teacher')
 
     def put(self, id: int) -> Response | None:
         data = request.get_json()
@@ -51,14 +51,15 @@ class StudentView(MethodView):
 
         result = self.service.update(id, data)
         if not result:
-            abort(404, description='Student not found')
+            abort(404, description='student not found')
             return None
-        return jsonify(message='Student updated successfully')
+
+        return jsonify(message='teacher updated successfully')
 
     def delete(self, id: int) -> Response | None:
         result = self.service.delete(id)
         if not result:
-            abort(404, description='Student not found')
+            abort(404, description='teacher not found')
             return None
 
-        return jsonify(message='Student deleted successfully')
+        return jsonify(message='teacher deleted successfully')
