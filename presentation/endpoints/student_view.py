@@ -22,7 +22,7 @@ class StudentView(MethodView):
     def post(self) -> Response:
         data = request.get_json()
         if not data:
-            abort(400, description="Invalid JSON data")
+            abort(400, description="Invalid data")
 
         entity = Student(
             id=None,
