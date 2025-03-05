@@ -31,10 +31,9 @@ class StudentView(MethodView):
         entity = Student(
             id=None,
             name=data.get('name'),
-            age=data.get('age'),
-            grade=data.get('grade'),
+            age=data.get('age')
         )
-        if not all([entity.name, entity.age, entity.grade]):
+        if not all([entity.name, entity.age]):
             abort(400, description='Required fields missing')
             return None
 

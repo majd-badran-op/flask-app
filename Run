@@ -1,7 +1,7 @@
 # Create a new student
 curl -X POST http://127.0.0.1:5000/students \
      -H "Content-Type: application/json" \
-     -d '{"name": "John Doe", "age": 20, "grade": 50}'
+     -d '{"name": "John Doe", "age": 20}'
 
 # Get all students
 curl -X GET http://127.0.0.1:5000/students \
