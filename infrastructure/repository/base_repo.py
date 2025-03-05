@@ -1,42 +1,45 @@
-from typing import Generic, TypeVar, Type, List, Optional, Any
+from typing import Generic, TypeVar, Type, List, Any
 from domain.base_class import BaseEntity
 from sqlalchemy import Table, insert, select, update, delete
-from sqlalchemy.engine import Result, Connection
+from sqlalchemy.orm import Session
+from sqlalchemy.engine import Result
 
 E = TypeVar('E', bound=BaseEntity)
 
 
 class BaseRepo(Generic[E]):
-    def __init__(self, entity: Type[E], table: Table, session: Connection) -> None:
+    def __init__(self, entity: Type[E], table: Table) -> None:
         self.entity = entity
         self.table = table
-        self.con = session
 
-    def insert(self, entity: E) -> Optional[E]:
+    def insert(self, entity: E, session: Session) -> E | None:
         data = {key: value for key, value in vars(entity).items() if key != 'id'}
         sql = insert(self.table).values(**data).returning(*self.table.columns)
-        result = self.con.execute(sql)
+        result = session.execute(sql)
+        session.commit()
         inserted_row = result.fetchone()
         return self.entity(**inserted_row._mapping) if inserted_row else None
 
-    def get_all(self) -> List[E]:
+    def get_all(self, session: Session) -> List[E]:
         sql = select(self.table)
-        result = self.con.execute(sql)
+        result = session.execute(sql)
         entities = [self.entity(**row._mapping) for row in result.fetchall()]
         return entities
 
-    def get(self, id: int) -> Optional[E]:
+    def get(self, id: int, session: Session) -> E | None:
         sql = select(self.table).where(self.table.c.id == id)
-        result = self.con.execute(sql).fetchone()
+        result = session.execute(sql).fetchone()
         return self.entity(**result._mapping) if result else None
 
-    def update(self, entity: E, id: int) -> bool:
+    def update(self, entity: E, id: int, session: Session) -> bool:
         data = {key: value for key, value in vars(entity).items() if key != 'id'}
         sql = update(self.table).where(self.table.c.id == id).values(**data)
-        result: Result[Any] = self.con.execute(sql)
-        return result.rowcount > 0
+        result: Result[Any] = session.execute(sql)
+        session.commit()
+        return result.rowcount > 0 if hasattr(result, 'rowcount') else False
 
-    def delete(self, id: int) -> bool:
+    def delete(self, id: int, session: Session) -> bool:
         sql = delete(self.table).where(self.table.c.id == id)
-        result: Result[Any] = self.con.execute(sql)
-        return result.rowcount > 0
+        result: Result[Any] = session.execute(sql)
+        session.commit()
+        return result.rowcount > 0 if hasattr(result, 'rowcount') else False

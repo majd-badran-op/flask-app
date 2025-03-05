@@ -1,23 +1,26 @@
 from typing import Optional
-from flask import abort, jsonify, request, Response
+from flask import Flask, abort, jsonify, request, Response
 from flask.views import MethodView
 from application.services.students import StudentServices
 from domain.student_entity import Student
+from infrastructure.repository.student_repo import StudentRepo
+from typing import Dict, Any
 
 
 class StudentView(MethodView):
-    def __init__(self, service: StudentServices) -> None:
-        self.service = service
+    def __init__(self) -> None:
+        student_repo = StudentRepo()
+        self.service = StudentServices(student_repo)
 
     def get(self, id: Optional[int] = None) -> Response:
         if id is None:
-            result = self.service.get_all()
-            return jsonify(result)
+            all_students: list[Dict[str, Any]] = self.service.get_all()
+            return jsonify(all_students)
         else:
-            result = self.service.get_by_id(int(id))
-            if result is None:
+            student: Dict[str, Any] | None = self.service.get_by_id(int(id))
+            if student is None:
                 abort(404, description='Student not found')
-            return jsonify(result)
+            return jsonify(student)
 
     def post(self) -> Response:
         data = request.get_json()
@@ -35,7 +38,7 @@ class StudentView(MethodView):
 
         result = self.service.add_student(entity)
         if result:
-            return jsonify(vars(result)), 201
+            return jsonify(vars(result))
         abort(500, description='Error adding student')
 
     def put(self, id: int) -> Response:
@@ -57,7 +60,7 @@ class StudentView(MethodView):
         return jsonify(message='Student deleted successfully')
 
 
-def register_routes(app, service: StudentServices):
-    student_view = StudentView.as_view('student_view', service)
+def register_routes(app: Flask) -> None:
+    student_view = StudentView.as_view('student_view')
     app.add_url_rule('/students', view_func=student_view, methods=['GET', 'POST'])
     app.add_url_rule('/students/<int:id>', view_func=student_view, methods=['GET', 'PUT', 'DELETE'])
