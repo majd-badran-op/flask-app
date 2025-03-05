@@ -1,44 +1,34 @@
-from sqlalchemy.engine import Connection, Result
-from sqlalchemy.sql import Executable
+from sqlalchemy.engine import Connection
 from sqlalchemy.engine.base import Transaction
 from typing import Optional, Type
-from dotenv import load_dotenv
+from infrastructure.database.con import get_session
 from types import TracebackType
-import os
-from sqlalchemy import create_engine
-
-load_dotenv()
-
-DATABASE_URL = os.getenv('DATABASE_URL') or ''
-engine = create_engine(DATABASE_URL)
+from .student_repo import StudentRepo
 
 
 class UnitOfWork:
     def __init__(self) -> None:
         self.connection: Optional[Connection] = None
         self.transaction: Optional[Transaction] = None
+        self.repo: Optional[StudentRepo] = None
 
     def __enter__(self) -> 'UnitOfWork':
-        self.connection = engine.connect()
+        self.connection = get_session()
         self.transaction = self.connection.begin()
+        self.repo = StudentRepo()
         return self
 
     def commit(self) -> None:
         if self.transaction:
             try:
                 self.transaction.commit()
-            except Exception:
+            except Exception as e:
                 self.rollback()
-                raise
+                raise e
 
     def rollback(self) -> None:
         if self.transaction:
             self.transaction.rollback()
-
-    def execute(self, sql: Executable) -> Result:
-        if self.connection:
-            return self.connection.execute(sql)
-        raise RuntimeError('Database connection is not established.')
 
     def __exit__(self, exc_type: Optional[Type[BaseException]], exc_value: Optional[BaseException],
                  traceback: Optional[TracebackType]) -> None:

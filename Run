@@ -12,7 +12,7 @@ curl -X GET http://127.0.0.1:5000/students/4 \
      -H "Content-Type: application/json"
 
 # Update a student by ID
-curl -X PUT http://127.0.0.1:5000/students/4 \
+curl -X PUT http://127.0.0.1:5000/students/3 \
      -H "Content-Type: application/json" \
      -d '{"name": "John Doe", "age": 21, "grade": 80}'
 

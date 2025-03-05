@@ -1,45 +1,46 @@
 from typing import Any, Dict
-from domain.student_entity import Student
 from infrastructure.repository.student_repo import StudentRepo
+from infrastructure.repository.unit_of_work import UnitOfWork
+from domain.student_entity import Student
 
 
 class StudentServices:
-    repo = StudentRepo()
+    def __init__(self, repo: StudentRepo) -> None:
+        self.repo = repo
 
-    @staticmethod
-    def add_student(data: Dict[str, Any]) -> Student | None:
-        entity = Student(
-            id=None,
-            name=data['name'],
-            age=data['age'],
-            grade=data['grade']
-        )
-        return StudentServices.repo.insert(entity)
+    def add_student(self, entity: Student) -> Student | None:
+        with UnitOfWork() as uow:
+            result = uow.repo.insert(entity)
+            uow.commit()
+            return result
 
-    @classmethod
-    def get_all(cls) -> list[Dict[str, Any]]:
-        return [vars(s) for s in cls.repo.get_all()]
+    def get_all(self) -> list[Dict[str, Any]]:
+        with UnitOfWork() as uow:
+            students = uow.repo.get_all()
+        return [vars(s) for s in students]
 
-    @classmethod
-    def get_by_id(cls, id: int) -> Dict[str, Any] | None:
-        student_entity = cls.repo.get(id)
-        if student_entity:
-            return vars(student_entity)
-        return None
+    def get_by_id(self, id: int) -> Dict[str, Any] | None:
+        with UnitOfWork() as uow:
+            student_entity = uow.repo.get(id)
+        return vars(student_entity) if student_entity else None
 
-    @classmethod
-    def update(cls, id: int, data: Dict[str, Any]) -> bool:
-        student = cls.repo.get(id)
-        if student is None:
-            return False
-        if 'name' in data and data['name'] != student.name:
-            student.name = data['name']
-        if 'age' in data and data['age'] != student.age:
-            student.age = data['age']
-        if 'grade' in data and data['grade'] != student.grade:
-            student.grade = data["grade"]
-        return cls.repo.update(student, id)
+    def update(self, id: int, data: Dict[str, Any]) -> bool:
+        with UnitOfWork() as uow:
+            student = uow.repo.get(id)
+            if student is None:
+                return False
 
-    @classmethod
-    def delete(cls, id: int) -> bool:
-        return cls.repo.delete(id)
+            student.name = data.get('name', student.name)
+            student.age = data.get('age', student.age)
+            student.grade = data.get('grade', student.grade)
+
+            uow.repo.update(student, id)
+            uow.commit()
+            return True
+
+    def delete(self, id: int) -> bool:
+        with UnitOfWork() as uow:
+            result = uow.repo.delete(id)
+            if result:
+                uow.commit()
+            return result
