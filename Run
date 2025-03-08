@@ -1,0 +1,44 @@
+# Create a new student
+curl -X POST http://127.0.0.1:5000/students \
+     -H "Content-Type: application/json" \
+     -d '{"name": "John Doe", "age": 20, "grade": 88}'
+
+# Get all students
+curl -X GET http://127.0.0.1:5000/students \
+     -H "Content-Type: application/json"
+
+# Get a specific student by ID
+curl -X GET http://127.0.0.1:5000/students/2 \
+     -H "Content-Type: application/json"
+
+# Update a student by ID
+curl -X PUT http://127.0.0.1:5000/students/3 \
+     -H "Content-Type: application/json" \
+     -d '{"name": "John Doe", "age": 25, "grade": 100}'
+
+# Delete a student by ID
+curl -X DELETE http://127.0.0.1:5000/students/1 \
+     -H "Content-Type: application/json"
+========================================================================================
+# Create a new teacher
+curl -X POST http://127.0.0.1:5000/teachers \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Smith Jane", "age": 30, "subject": "Math"}'
+
+# Get all teachers
+curl -X GET http://127.0.0.1:5000/teachers \
+     -H "Content-Type: application/json"
+
+# Get a specific teacher by ID
+curl -X GET http://127.0.0.1:5000/teachers/1 \
+     -H "Content-Type: application/json"
+
+# Update a teacher by ID
+curl -X PUT http://127.0.0.1:5000/teachers/3 \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Jane Smith", "age": 32, "subject": "English"}'
+
+# Delete a teacher by ID
+curl -X DELETE http://127.0.0.1:5000/teachers/2 \
+     -H "Content-Type: application/json"
+
