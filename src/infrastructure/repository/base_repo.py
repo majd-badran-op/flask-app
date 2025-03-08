@@ -34,9 +34,9 @@ class BaseRepo(Generic[E]):
         data = {key: value for key, value in vars(entity).items() if key != 'id'}
         sql = update(self.table).where(self.table.c.id == id).values(**data)
         result: Result[Any] = session.execute(sql)
-        return result.rowcount > 0 if hasattr(result, 'rowcount') else False
+        return result.rowcount > 0
 
     def delete(self, id: int, session: Session) -> bool:
         sql = delete(self.table).where(self.table.c.id == id)
         result: Result[Any] = session.execute(sql)
-        return result.rowcount > 0 if hasattr(result, 'rowcount') else False
+        return result.rowcount > 0
