@@ -1,5 +1,4 @@
 from sqlalchemy import Table, Column, Integer, String, MetaData
-from .con import engine
 
 metadata = MetaData()
 
@@ -11,13 +10,10 @@ students = Table(
     Column('grade', Integer),
 )
 
-teacher = Table(
+teachers = Table(  # Fixed variable name (was 'teacher')
     'teachers', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('name', String),
     Column('age', Integer),
     Column('subject', String)
 )
-
-
-metadata.create_all(engine)
