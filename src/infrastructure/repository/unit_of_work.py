@@ -5,6 +5,10 @@ from infrastructure.database.con import get_session
 from types import TracebackType
 
 
+class DatabaseException(Exception):
+    pass
+
+
 class UnitOfWork:
     def __init__(self, repo_class: BaseRepo[Any]) -> None:
         self.session: Session

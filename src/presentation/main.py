@@ -1,9 +1,8 @@
 from flask import Flask
 from .routes import register_routes
+from .exceptions import register_error_handlers
 
 app = Flask(__name__)
 
 register_routes(app)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+register_error_handlers(app)
