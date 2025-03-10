@@ -26,7 +26,7 @@ class TeacherView(MethodView):
     def post(self) -> Response | None:
         data = request.get_json()
         if not data:
-            abort(400, description="Invalid data")
+            abort(400, description='Invalid data')
 
         entity = Teacher(
             id=None,
@@ -46,7 +46,7 @@ class TeacherView(MethodView):
     def put(self, id: int) -> Response | None:
         data = request.get_json()
         if not data:
-            abort(400, description="Invalid JSON data")
+            abort(400, description='Invalid JSON data')
             return None
 
         entity = Teacher(

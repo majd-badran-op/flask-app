@@ -69,3 +69,5 @@ class StudentView(MethodView):
             return None
 
         return jsonify(message='Student deleted successfully')
+
+
