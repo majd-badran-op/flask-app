@@ -8,9 +8,10 @@ students = Table(
     Column('name', String),
     Column('age', Integer),
     Column('grade', Integer),
+    Column('nationality', String, nullable=True)
 )
 
-teachers = Table(  # Fixed variable name (was 'teacher')
+teachers = Table(
     'teachers', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('name', String),

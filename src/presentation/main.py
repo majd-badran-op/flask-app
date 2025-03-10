@@ -1,7 +1,7 @@
 from flask import Flask
 from .routes import register_routes
 from .exceptions import register_error_handlers
-from routes import setup_cors  # Make sure to import this
+from .routes import setup_cors
 
 app = Flask(__name__)
 
